@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 export default function useBookSearch(query, pageNumber) {
   const [loading, setLoading] = useState(true)
@@ -10,7 +10,7 @@ export default function useBookSearch(query, pageNumber) {
   useEffect(() => {
     setBooks([])
   }, [query])
-  
+
   useEffect(() => {
     setLoading(true)
     setError(false)
@@ -18,7 +18,7 @@ export default function useBookSearch(query, pageNumber) {
     axios({
       method: 'GET',
       url: 'http://openlibrary.org/search.json',
-      params: { q: query, page: pageNumber},
+      params: { q: query, page: pageNumber },
       cancelToken: new axios.CancelToken(c => cancel = c)
     }).then(res => {
       setBooks(prevBooks => {
@@ -26,9 +26,8 @@ export default function useBookSearch(query, pageNumber) {
       })
       setHasMore(res.data.docs.length > 0)
       setLoading(false)
-
     }).catch(e => {
-      if(axios.isCancel(e)) return
+      if (axios.isCancel(e)) return
       setError(true)
     })
     return () => cancel()
